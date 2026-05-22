@@ -1,0 +1,34 @@
+# Changelog
+
+All notable changes to nixamp are documented here.
+
+The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+Versions are tagged on meaningful milestones, not every commit.
+
+---
+
+## [Unreleased]
+
+---
+
+## [0.1.0] — 2026-05-22
+
+### Added
+- `devenv.nix` declaring the full LAMP-equivalent stack:
+  PHP 8.3 + PHP-FPM, Caddy, MariaDB, Adminer
+- PHP extensions: mysqli, pdo, pdo_mysql, mbstring, curl, openssl, tokenizer
+- `uni_db` database and `cypher` user bootstrapped on first `devenv up`
+- Shell scripts: `lamp-status`, `lamp-db`, `lamp-logs`, `lamp-php-info`
+- `.envrc` with `eval "$(devenv direnvrc)"` + `use devenv` for automatic
+  shell activation on `cd` via direnv + nix-direnv
+- `www/` document root with three test files:
+  `index.php` (stack health), `db.php` (mysqli + PDO connectivity), `info.php` (phpinfo)
+- `docs/architecture.md` — stack design, tool explanations, Mermaid diagrams
+- `docs/journal/2026-05-12-nixamp-lamp-devenv-setup.md` — setup journal entry
+- `README.md` — project overview, prerequisites, usage instructions
+
+### Notes
+- Apache substituted with Caddy (devenv does not ship Apache)
+- phpMyAdmin substituted with Adminer (no stable nixpkgs derivation for phpMyAdmin)
+- Perl declared as commented-out block for XAMPP faithfulness; inactive by default
+- Laravel declared as commented-out block for future use; inactive by default

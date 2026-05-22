@@ -1,0 +1,169 @@
+# nixamp
+
+A reproducible, declarative XAMPP-equivalent development environment for NixOS,
+built with [devenv](https://devenv.sh). Provides PHP 8.3, MariaDB, Caddy, and
+Adminer — the full LAMP stack — as an ephemeral per-project shell.
+
+---
+
+## Background
+
+This project was bootstrapped as a requirement for a university internet programming
+course focused on backend development and databases using PHP. The course assumes
+XAMPP as the local development environment.
+
+Rather than installing XAMPP — a monolithic pre-bundled stack — this repository
+declares the equivalent tools reproducibly via Nix and devenv. The environment is
+identical in capability, more transparent in wiring, and fully reproducible across
+machines.
+
+See [`docs/architecture.md`](docs/architecture.md) for a full explanation of the
+stack, tool choices, and how the pieces wire together.
+
+---
+
+## Stack
+
+| Tool | Role | Port |
+|------|------|------|
+| PHP 8.3 + PHP-FPM | Server-side scripting via FastCGI process manager | — |
+| Caddy | HTTP server, forwards `.php` requests to FPM | 8080 |
+| MariaDB | Relational database server | 3306 |
+| Adminer | Browser-based database UI (phpMyAdmin equivalent) | 8081 |
+
+---
+
+## Prerequisites
+
+- [NixOS](https://nixos.org) with flakes enabled
+- [devenv](https://devenv.sh) installed globally
+- [direnv](https://direnv.net) with [nix-direnv](https://github.com/nix-community/nix-direnv) enabled
+
+If you are running CypherOS, `devenv`, `direnv`, and `nix-direnv` are declared in
+`modules/home/devenv.nix` and activated via `cypher-os.dev.devenv.enable = true`.
+
+---
+
+## Setup
+### Setup Repository
+#### Clone The repository
+
+```bash
+git clone git@github.com:CypherWhisperer/nixamp.git
+cd nixamp
+```
+
+#### OR scaffold your own
+
+##### 1. Initialise devenv in your own repo/ directory
+
+```bash
+# From the root of your repository (directory)
+devenv init
+```
+
+This scaffolds a `devenv.nix` and `devenv.yaml` in the directory. _The scaffolded `devenv.nix` module is just a hello-world placeholder_.
+
+##### 2. Replace `devenv.nix`
+
+Open `devenv.nix` and replace its entire contents with your implementation.
+
+##### 3. Create the `.envrc`
+
+This is what hooks direnv into the directory:
+```bash
+eval "$(devenv direnvrc)"
+use devenv
+```
+
+After `direnv allow`, every time you cd into this directory `zsh` (shell) will automatically activate the `devenv` shell. You'll see the welcome banner fire on entry.
+
+##### 4. Create the document root
+
+```bash
+mkdir -p www
+```
+
+#### Allow `direnv` to activate the environment
+```bash
+direnv allow
+```
+
+Apache serves from ./www/. All  .php files for the go here.
+
+#### First boot
+
+```bash
+# The shell activates automatically on cd.
+# Start all services:
+devenv up
+```
+This starts Apache on localhost:8080 and MariaDB on 3306 as managed foreground processes. First run will take a moment as devenv fetches and builds the environment — _subsequent runs are instant from cache_.
+
+On first run, devenv will build the environment from the Nix store. Subsequent
+activations are instant from cache.
+
+---
+
+## Usage
+
+With `devenv up` running in one terminal, open a second terminal and `cd` into the
+project. The devenv shell activates automatically via direnv.
+
+**Available commands:**
+
+```
+devenv up          → start Caddy, PHP-FPM, MariaDB, and Adminer
+lamp-status        → check whether all services are reachable
+lamp-db            → open an interactive MariaDB CLI session
+lamp-logs          → tail the PHP-FPM error log
+lamp-php-info      → dump PHP version and loaded extensions
+```
+
+**URLs:**
+
+```
+Web root:  http://localhost:8080
+Adminer:   http://localhost:8081
+```
+
+Adminer login: server `127.0.0.1`, user `cypher`, password `cypher`, database `uni_db`.
+
+**Document root:** `./www/`
+Drop `.php` files here. Caddy serves them at `http://localhost:8080/<filename>.php`.
+
+---
+
+## Project Structure
+
+```
+nixamp/
+  www/               ← document root (PHP files go here)
+  docs/
+    journal/         ← session journals documenting the development process
+    architecture.md  ← stack design, tool explanations, Mermaid diagrams
+  devenv.nix         ← the full environment declaration
+  devenv.yaml        ← devenv inputs
+  .envrc             ← direnv hook (use devenv)
+  CHANGELOG.md       ← version history
+```
+
+---
+
+## Documentation
+
+- [`docs/architecture.md`](docs/architecture.md) — stack design, tool purposes,
+  wiring diagrams, and design decisions
+- [`docs/journal/`](docs/journal/) — session-by-session development journal
+- [`CHANGELOG.md`](CHANGELOG.md) — notable changes per version
+
+---
+
+## Notes
+
+- This environment is for local development only. Several security features
+  (e.g. `display_errors = On`, open DB credentials) are intentionally configured
+  for development convenience and must never be used in a production context.
+- `devenv up` runs services in the foreground. Use a second terminal for shell
+  commands while services are running.
+- The `.devenv/` directory is generated by devenv and is gitignored. Do not commit it.
