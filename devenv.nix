@@ -1,5 +1,8 @@
 # devenv.nix
 #
+# Refer to docs/architecture.md for an overview of the architecture
+# and design decisions
+#
 # ─────────────────────────────────────────────────────────────────────────────
 # USAGE
 # ─────────────────────────────────────────────────────────────────────────────
