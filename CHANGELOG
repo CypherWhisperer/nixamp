@@ -15,8 +15,8 @@ Versions are tagged on meaningful milestones, not every commit.
 
 ### Added
 - `devenv.nix` declaring the full LAMP-equivalent stack:
-  PHP 8.3 + PHP-FPM, Caddy, MariaDB, Adminer
-- PHP extensions: mysqli, pdo, pdo_mysql, mbstring, curl, openssl, tokenizer
+  _PHP 8.3 + PHP-FPM, Caddy, MariaDB, Adminer_
+- PHP extensions: `mysqli, pdo, pdo_mysql, mbstring, curl, openssl, tokenizer`
 - `uni_db` database and `cypher` user bootstrapped on first `devenv up`
 - Shell scripts: `lamp-status`, `lamp-db`, `lamp-logs`, `lamp-php-info`
 - `.envrc` with `eval "$(devenv direnvrc)"` + `use devenv` for automatic
@@ -24,7 +24,7 @@ Versions are tagged on meaningful milestones, not every commit.
 - `www/` document root with three test files:
   `index.php` (stack health), `db.php` (mysqli + PDO connectivity), `info.php` (phpinfo)
 - `docs/architecture.md` — stack design, tool explanations, Mermaid diagrams
-- `docs/journal/2026-05-12-nixamp-lamp-devenv-setup.md` — setup journal entry
+- `docs/journal/2026_05_12_NIXAMP_SETUP.md` — setup journal entry
 - `README.md` — project overview, prerequisites, usage instructions
 
 ### Notes

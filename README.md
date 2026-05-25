@@ -40,7 +40,7 @@ stack, tool choices, and how the pieces wire together.
 - [direnv](https://direnv.net) with [nix-direnv](https://github.com/nix-community/nix-direnv) enabled
 
 If you are running CypherOS, `devenv`, `direnv`, and `nix-direnv` are declared in
-`modules/home/devenv.nix` and activated via `cypher-os.dev.devenv.enable = true`.
+`modules/apps/dev/devenv.nix` and activated via `cypher-os.apps.dev.devenv.enable = true`.
 
 ---
 
@@ -144,8 +144,10 @@ nixamp/
     architecture.md  ← stack design, tool explanations, Mermaid diagrams
   devenv.nix         ← the full environment declaration
   devenv.yaml        ← devenv inputs
+  devenv.lock        ← devenv lock file
   .envrc             ← direnv hook (use devenv)
   CHANGELOG.md       ← version history
+  README.md          ← Documentation entry (_project overview, prerequisites, usage instructions_)
 ```
 
 ---
