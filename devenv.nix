@@ -195,6 +195,7 @@
 
   scripts.lamp-db.exec = ''
     # Opens an interactive MariaDB session against uni_db.
+    ${pkgs.mariadb}/bin/mysql \
       --socket="$DEVENV_RUNTIME/mysql.sock" \
       --user=cypher \
       --password=cypher \
