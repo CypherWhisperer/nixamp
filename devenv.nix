@@ -180,9 +180,8 @@
     echo ""
     echo "[ MariaDB ]"
     ${pkgs.mariadb}/bin/mysqladmin \
-      --user=cypher \
-      --password=cypher \
-      --host=127.0.0.1 \
+      --socket="$DEVENV_RUNTIME/mysql.sock" \
+      --user=root \
       status 2>/dev/null \
       && echo "  Reachable:   YES" \
       || echo "  Reachable:   NO  (run 'devenv up')"
@@ -196,10 +195,9 @@
 
   scripts.lamp-db.exec = ''
     # Opens an interactive MariaDB session against uni_db.
-    ${pkgs.mariadb}/bin/mysql \
+      --socket="$DEVENV_RUNTIME/mysql.sock" \
       --user=cypher \
       --password=cypher \
-      --host=127.0.0.1 \
       uni_db
   '';
 
